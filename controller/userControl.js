@@ -380,7 +380,11 @@ exports.scheduleCall = async (req, res) => {
             return res.status(404).json({ success: false, message: "Participant not found." });
         }
 
-        const startTime = moment(`${date}T${time}`);
+        const startTime = moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm');
+
+        if (!startTime.isValid()) {
+            return res.status(400).json({ success: false, message: "Invalid date or time format." });
+        }
         const endTime = startTime.clone().add(duration, 'minutes');
         const dateTime = startTime.toDate();
 
